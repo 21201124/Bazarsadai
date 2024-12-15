@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">Checkout</h2>
+    {% if cart_items %}
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Order Summary</h5>
+                    <ul class="list-group list-group-flush">
+                        {% for item in cart_items %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="my-0">{{ item.product.name }}</h6>
+                                <small class="text-muted">{{ item.product.category }}</small>
+                            </div>
+                            <span class="text-muted">BDT {{ item.total_price }}</span>
+                        </li>
+                        {% endfor %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Total (BDT)</span>
+                            <strong>BDT {{ total_price }}</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Payment</h5>
+                    <form method="post" action="{% url 'checkout' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="cardName" class="form-label">Name on card</label>
+                            <input type="text" class="form-control" id="cardName" placeholder="Full name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cardNumber" class="form-label">Credit card number</label>
+                            <input type="text" class="form-control" id="cardNumber" placeholder="Card number" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cardExpiration" class="form-label">Expiration</label>
+                            <input type="text" class="form-control" id="cardExpiration" placeholder="MM/YY" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cardCVV" class="form-label">CVV</label>
+                            <input type="text" class="form-control" id="cardCVV" placeholder="CVV" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Place Order</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p>Your cart is empty.</p>
+    {% endif %}
+</div>
+{% endblock %}
